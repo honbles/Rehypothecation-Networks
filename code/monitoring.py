@@ -360,9 +360,9 @@ def compute_tau_intervention(
     tau_intervention = t_Delta* - t_Phi*
 
     Asymmetric k values reflect different signal structures:
-    - Phi starts low and builds gradually -> k_phi=2
-    - Delta starts already elevated (rules disagree by construction)
-      -> k_delta=1 catches when divergence exceeds its normal fluctuation
+    - k=2.0 symmetric for both Phi and Delta: threshold = mean + 2*std
+      of the baseline period. Same multiplier for both signals for
+      consistency. Earlier design used asymmetric k_delta=1; corrected.
 
     Paper: Definition -- Regulatory Intervention Window.
     """
