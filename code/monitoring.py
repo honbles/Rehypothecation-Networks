@@ -108,20 +108,16 @@ def R_lex(
     """
     Lexicographic priority selection rule R_lex.
 
-    Allocates V_A to claimants in descending priority order.
-    The actual allocation amount per claimant is weighted by
-    their effective claim strength ||Psi_i|| * pi_i, so that
-    economic drift (changing econ vectors) continuously affects
-    how much each claimant receives — not just who goes first.
+    Pure strict waterfall: allocate V_A to claimants in descending
+    pi_scores order, each receiving up to their nominal claim w_i.
+    The aggregate state Psi(A,t) is not used directly here — the
+    clearing operator acts on individual claimant states (w_i, c_i)
+    and derived priority scores, not on the compressed aggregate vector.
 
     Paper: Definition R_lex.
     """
     n = len(nominal)
     order = np.argsort(-pi_scores)   # descending priority
-
-    # Effective claim strength: nominal scaled by Psi magnitude and pi
-    psi_norms = np.linalg.norm(Psi, axis=1)   # (n,)
-    effective  = nominal * (0.5 + 0.5 * psi_norms / (psi_norms.max() + 1e-10))
 
     r = np.zeros(n)
     remaining = V_A_total
@@ -129,17 +125,10 @@ def R_lex(
     for idx in order:
         if remaining <= 0:
             break
-        r[idx] = min(effective[idx], remaining)
+        r[idx] = min(float(nominal[idx]), remaining)
         remaining -= r[idx]
 
-    # If budget not fully distributed, add remainder proportionally
-    if remaining > 1e-8:
-        unpaid = np.where(r < effective)[0]
-        if len(unpaid) > 0:
-            extra = remaining * (effective[unpaid] / (effective[unpaid].sum() + 1e-10))
-            r[unpaid] += extra
-
-    return np.clip(r, 0, nominal)
+    return r
 
 
 def R_regret(
@@ -160,11 +149,11 @@ def R_regret(
     """
     n = len(nominal)
 
-    # Effective claim: nominal weighted by econ state magnitude
-    psi_norms  = np.linalg.norm(Psi, axis=1)
-    psi_scaled = psi_norms / (psi_norms.max() + 1e-10)
-    effective  = nominal * (0.3 + 0.7 * psi_scaled)
-    effective  = np.maximum(effective, 1e-6)
+    # R_regret uses nominal claim amounts w_i as the entitlements.
+    # The clearing operator acts on individual claimant states, not
+    # the compressed aggregate Psi. Psi is not used here.
+    effective = nominal.copy()
+    effective = np.maximum(effective, 1e-6)
 
     # Ensure feasibility
     if effective.sum() < V_A_total:
@@ -293,56 +282,37 @@ def compute_pi_scores(
 # -----------------------------------------------------------------------
 
 def compute_Delta(
-    nominal: np.ndarray,
-    V_A_total: float,
-    pi_scores: np.ndarray,
-    Psi: np.ndarray,
-    G_legal: np.ndarray,
-    n_samples: int = 60,
-    t: int = 0
+    r_lex: np.ndarray,
+    r_regret: np.ndarray,
+    r_hist: np.ndarray,
+    V_A_total: float
 ) -> float:
     """
-    Delta(t) = resolution sensitivity measure
+    Delta(t) = max_{j != k} || R_hat_j(Psi(t)) - R_hat_k(Psi(t)) || / V_A_total
 
-    Directly implements the paper definition: Delta measures the spread
-    of the feasible allocation set. We proxy this by the INVERSE of the
-    priority score spread — when pi scores compress (ordering becomes
-    ambiguous), the feasible set expands and resolution sensitivity grows.
+    This is the formal definition from the paper (Definition 3.26), now
+    implemented directly. The three selection rule outputs are already
+    computed at each timestep; this function simply takes their maximum
+    pairwise L2 distance, normalised by V_A_total so Delta is dimensionless.
 
-    Specifically:
-        Delta(t) = 1 / (1 + pi_spread(t))
+    Properties:
+    - Regime 1: all three rules agree -> Delta near zero
+    - Regime 2/3: rules diverge -> Delta grows
+    - Legal shock: G_legal restructuring changes pi scores -> R_lex ordering
+      shifts -> divergence from R_hist (anchored at t=0) and R_regret jumps
+    - Economic drift: encumbrance grows -> pi scores compress -> R_lex
+      ordering becomes unstable -> distance from priority-blind R_hist grows
 
-    where pi_spread = IQR of pi_legal (interquartile range of G_legal-
-    scaled priority scores).
+    This replaces the IQR proxy used in earlier versions. The formal
+    definition is directly computable since all three selection rules are
+    evaluated at every timestep.
 
-    This gives:
-    - Economic drift: encumbrance grows -> all pi shift negative and
-      compress -> pi_spread shrinks -> Delta RISES monotonically
-    - Legal shock at t=50: G_legal drops admissibility -> pi_legal[i]
-      scaled down for cross-jurisdiction claimants -> pi_spread JUMPS
-      (some scores drop sharply, others unchanged -> wider spread
-       from the new bimodal distribution) -> Delta changes discretely
-    - Regime 1: clear priority ordering, large pi_spread, Delta LOW
-    - Regime 3: compressed/ambiguous ordering, small pi_spread, Delta HIGH
-
-    Paper: Definition -- Selection Rule Divergence Measure, dim(R_hat).
+    Paper: Definition 3.26 -- Selection Rule Divergence Measure.
     """
-    # G_legal admissibility scaling
-    if G_legal is not None:
-        admis = G_legal.mean(axis=1)   # (n,) fraction admissible
-    else:
-        admis = np.ones(len(pi_scores))
-
-    pi_legal = pi_scores * admis
-
-    # IQR of pi_legal
-    q75 = float(np.percentile(pi_legal, 75))
-    q25 = float(np.percentile(pi_legal, 25))
-    pi_spread = q75 - q25
-
-    # Delta = inverse spread, scaled to [0,1]
-    # Normalisation constant 0.15 is typical pi_spread at t=0
-    return float(1.0 / (1.0 + pi_spread / 0.03))
+    d_lex_regret  = np.linalg.norm(r_lex    - r_regret)
+    d_lex_hist    = np.linalg.norm(r_lex    - r_hist)
+    d_regret_hist = np.linalg.norm(r_regret - r_hist)
+    return float(max(d_lex_regret, d_lex_hist, d_regret_hist)) / (V_A_total + 1e-10)
 
 
 
@@ -537,12 +507,9 @@ def run_monitoring(
         r_regret_t = R_regret(Psi_t, nominal, V_A_total)
         r_hist_t   = R_hist(Psi_t, nominal, V_A_total, r_hist_anchor)
 
-        # Compute Delta(t) via feasible set sampling
-        # Directly implements paper Definition: spread of R_hat(Psi(t))
-        Delta_t = compute_Delta(
-            nominal, V_A_total, pi, Psi_t, G_legal_t,
-            n_samples=60, t=t
-        )
+        # Compute Delta(t) — formal Definition 3.26
+        # Maximum pairwise L2 distance between the three selection rule outputs
+        Delta_t = compute_Delta(r_lex_t, r_regret_t, r_hist_t, V_A_total)
 
         # Compute beta(t)
         if t == 0:

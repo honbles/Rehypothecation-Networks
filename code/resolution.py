@@ -291,9 +291,13 @@ def run_resolution(
     Psi_init   = build_Psi(nominal, econ_init)
     r_lex_t0   = R_lex(Psi_init, nominal, V_A_total, pi_init)
 
-    gap_lex    = compute_netting_gap(r_lex_t0, r_netting, nominal, rho_matrix)
-    gap_regret = compute_netting_gap(r_lex_t0, r_netting, nominal, rho_matrix)
-    gap_hist   = compute_netting_gap(r_lex_t0, r_netting, nominal, rho_matrix)
+    # Fix: each selection rule evaluated independently at t=0
+    r_regret_t0 = R_regret(Psi_init, nominal, V_A_total)
+    r_hist_t0   = R_hist(Psi_init, nominal, V_A_total, r_lex_t0)
+
+    gap_lex    = compute_netting_gap(r_lex_t0,    r_netting, nominal, rho_matrix)
+    gap_regret = compute_netting_gap(r_regret_t0, r_netting, nominal, rho_matrix)
+    gap_hist   = compute_netting_gap(r_hist_t0,   r_netting, nominal, rho_matrix)
 
     # --- Print summary ---
     print(f"\n  Resolution outcomes at crisis fixed point:")

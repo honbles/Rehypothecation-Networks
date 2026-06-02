@@ -241,29 +241,36 @@ def update_rho_matrix(
 
 def apply_legal_shock(
     G_legal: np.ndarray,
-    shock_magnitude: float
+    shock_magnitude: float,
+    claimant_jurisdictions: np.ndarray = None
 ) -> np.ndarray:
     """
     Apply a discrete legal regime shock to G_legal.
 
     At t = LEGAL_SHOCK_TIMESTEP, a fraction shock_magnitude of
-    cross-jurisdiction admissible interactions become inadmissible.
+    CROSS-JURISDICTION admissible interactions become inadmissible.
+    Same-jurisdiction pairs are never affected by the shock.
+
     This models a regulatory change, sanctions event, or jurisdiction
     exit that instantly restructures the legal scaffold.
 
-    Paper: G_legal changes only at discrete regime-change events.
-    This is the discrete jump dG_legal/dt != 0 at t_regime.
+    Paper: G_legal changes only at discrete regime-change events;
+    only cross-jurisdiction pairs are affected.
     """
     G_new = G_legal.copy()
     n = G_legal.shape[0]
 
     for i in range(n):
         for j in range(i+1, n):
-            if G_legal[i, j]:
-                # Remove admissibility with probability shock_magnitude
-                if rng.random() < shock_magnitude:
-                    G_new[i, j] = False
-                    G_new[j, i] = False
+            if not G_legal[i, j]:
+                continue
+            # Only affect cross-jurisdiction pairs
+            if claimant_jurisdictions is not None:
+                if claimant_jurisdictions[i] == claimant_jurisdictions[j]:
+                    continue   # same jurisdiction — unaffected by shock
+            if rng.random() < shock_magnitude:
+                G_new[i, j] = False
+                G_new[j, i] = False
 
     return G_new
 
@@ -426,7 +433,16 @@ def run_dynamics(scenario_dir: str, output_dir: str) -> dict:
                 and not legal_shock_applied):
             print(f"  [t={t:3d}] Legal regime shock applied "
                   f"(magnitude={cfg['legal_shock_magnitude']:.1%})")
-            G_legal = apply_legal_shock(G_legal, cfg["legal_shock_magnitude"])
+            # Load claimant jurisdiction array so shock only affects
+            # cross-jurisdiction pairs (paper: same-jurisdiction pairs unaffected)
+            import json as _json
+            _meta = _json.load(open(os.path.join(scenario_dir, "network_metadata.json")))
+            _jur_map  = {int(k): v for k,v in _meta["jurisdiction_map"].items()}
+            _claims   = _meta["claims"]
+            _cl_jur   = np.array([
+                _jur_map[c["holder_institution_id"]] for c in _claims
+            ])
+            G_legal = apply_legal_shock(G_legal, cfg["legal_shock_magnitude"], _cl_jur)
             legal_shock_applied = True
 
         # --- 2. Apply collateral shock if scheduled ---

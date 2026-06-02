@@ -112,7 +112,7 @@ admissibility (shock), Delta rises — capturing feasible set expansion.
 | Scenario | tau | t_Phi* | t_Delta* | Netting Gap |
 |---|---|---|---|---|
 | Economic Drift | **+68** | 31 | 99 | 40.45% |
-| Legal Regime Shock | **-49** | 99 (never) | 50 | 40.45% |
+| Legal Regime Shock | **-74** | 99 (never) | 25 | 40.45% |
 | Compound | **+18** | 31 | 49 | 40.45% |
 
 Netting gap is identical across all scenarios — confirms structural origin (Theorem 5.8).

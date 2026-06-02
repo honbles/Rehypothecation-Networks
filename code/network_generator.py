@@ -78,7 +78,7 @@ N_JURISDICTIONS = 3
 # G_legal admissibility: interactions between institutions in the same
 # jurisdiction are always admissible; cross-jurisdiction interactions
 # are admissible with probability CROSS_JURISDICTION_ADMISSIBILITY
-CROSS_JURISDICTION_ADMISSIBILITY = 0.5
+CROSS_JURISDICTION_ADMISSIBILITY = 0.7   # matches paper (p_cross = 0.7)
 
 # Scenario-specific shock parameters
 ECONOMIC_DRIFT_RATE   = 0.012   # mu reaches ~1.2 by t=100 from 0.02 start
