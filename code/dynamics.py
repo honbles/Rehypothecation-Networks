@@ -20,10 +20,10 @@ that are left as open problems in the paper.
 
 Paper references
 ----------------
-Coupled Evolution    : Section 1.7
-Crisis Fixed Point   : Section 1.5
-Interaction Kernel   : Definition 1.6
-Collateral Shock     : Definition 2.4 (shock operator)
+Coupled Evolution    : Section 3.8
+Crisis Fixed Point   : Section 3.5
+Interaction Kernel   : Definition 3.8
+Collateral Shock     : Definition 5.4 (shock operator)
 Simulation-specific F: companion paper specification
 """
 
@@ -131,7 +131,7 @@ def apply_F(
     - The SPREAD of pi scores across claims grows with drift
     - Delta (inverse pi spread) rises monotonically with economic drift
 
-    Paper: Section 3.9 coupled evolution, Remark 3.1 on F.
+    Paper: Section 3.8 coupled evolution, Remark 3.1 on F.
     """
     n = econ_vectors.shape[0]
     C_new = econ_vectors.copy()
@@ -180,7 +180,7 @@ def update_G_econ(
         G_econ_ij(t) = rho_ij(t) * mu(t)   (conditioned on G_legal)
 
     The 3x3 block structure encodes cross-dimension coupling.
-    Paper: Definition 1.6, simulation proxy.
+    Paper: Definition 3.8, simulation proxy.
     """
     n = rho_matrix.shape[0]
     G = np.zeros((3 * n, 3 * n))
@@ -286,7 +286,7 @@ def apply_collateral_shock(
     delta_A: float
 ) -> np.ndarray:
     """
-    Apply collateral shock operator from paper Definition 2.4.
+    Apply collateral shock operator from paper Definition 5.4.
 
     For claims on the shocked asset:
         Delta c_i^econ(t) = -delta_A * rho_iA * c_i^econ(t)
@@ -296,7 +296,7 @@ def apply_collateral_shock(
 
     This propagates the shock only through the economic sub-vector
     (p, e, l). The legal sub-vector (s, j, tau) is unaffected.
-    Paper: Remark after Definition 2.4.
+    Paper: Remark after Definition 5.4.
     """
     C_new = econ_vectors.copy()
     for i, asset_id in enumerate(asset_map):
@@ -316,14 +316,35 @@ def compute_kappa(G_econ: np.ndarray) -> float:
     Measures geometric instability of the claim space.
     Paper: Fragility Observable definition.
 
-    Uses numpy's 2-norm condition number.
-    Clipped at 1e6 to avoid numerical infinity in early timesteps.
+    Returns the true computed value clipped at 1e8 only for numerical
+    stability in downstream products (e.g. beta computation).
+    Use compute_kappa_raw() for summary reporting so diagnostics do not
+    show the sentinel value 1e8 for all scenarios indistinguishably.
     """
     try:
         k = cond(G_econ, p=2)
         return float(np.clip(k, 1.0, 1e8))
     except Exception:
         return 1.0
+
+
+def compute_kappa_raw(G_econ: np.ndarray) -> float:
+    """
+    True condition number without ceiling clip.
+    Used for summary reporting (Fig. 9) so the table shows real peak
+    values rather than the sentinel 1e8 that would falsely imply equal
+    kernel instability across all crisis scenarios.
+    Paper: Remark 6.5 — kappa is ill-conditioned for dense near-uniform
+    matrices; the Frobenius norm is used in Phi instead. This raw value
+    is for diagnostics only and should be labelled as such in the paper.
+    """
+    try:
+        k = cond(G_econ, p=2)
+        if np.isinf(k) or np.isnan(k):
+            return float("inf")
+        return float(k)
+    except Exception:
+        return float("inf")
 
 
 # -----------------------------------------------------------------------
@@ -481,13 +502,14 @@ def run_dynamics(scenario_dir: str, output_dir: str) -> dict:
         C_econ = apply_F(C_econ, G_econ, ECON_NOISE_LEVEL, rho_mat)
 
         # --- 7. Record time series ---
-        kappa         = compute_kappa(G_econ)
+        kappa         = compute_kappa(G_econ)        # clipped at 1e8 for stability
+        kappa_raw_t   = compute_kappa_raw(G_econ)    # true value for diagnostics
         L             = compute_L(nominal, V_A, asset_map)
         dG_norm       = compute_dG_norm(G_econ, G_prev)
         rho_scalar    = float(np.mean(rho_mat[np.triu_indices(n, k=1)]))
         Phi           = compute_Phi(kappa, L, dG_norm, G_econ)
 
-        ts_kappa[t]   = kappa
+        ts_kappa[t]   = kappa_raw_t   # store real value; Phi uses Frobenius norm internally
         ts_L[t]       = L
         ts_dG[t]      = dG_norm
         ts_Phi[t]     = Phi

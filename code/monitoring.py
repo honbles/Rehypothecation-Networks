@@ -24,7 +24,7 @@ And records the intervention window:
 
 Paper references
 ----------------
-Monitoring Mode          : Section 1.8.2 (subsubsection)
+Monitoring Mode          : Section 3.9.2 (subsubsection)
 Selection Rule Divergence: Definition -- Delta(t)
 Bifurcation Parameter    : Definition -- beta(G, Psi)
 Fragility Observable     : Definition -- Phi(A,t)
@@ -290,7 +290,7 @@ def compute_Delta(
     """
     Delta(t) = max_{j != k} || R_hat_j(Psi(t)) - R_hat_k(Psi(t)) || / V_A_total
 
-    This is the formal definition from the paper (Definition 3.26), now
+    This is the formal definition from the paper (Definition 3.20), now
     implemented directly. The three selection rule outputs are already
     computed at each timestep; this function simply takes their maximum
     pairwise L2 distance, normalised by V_A_total so Delta is dimensionless.
@@ -307,7 +307,7 @@ def compute_Delta(
     definition is directly computable since all three selection rules are
     evaluated at every timestep.
 
-    Paper: Definition 3.26 -- Selection Rule Divergence Measure.
+    Paper: Definition 3.20 -- Selection Rule Divergence Measure.
     """
     d_lex_regret  = np.linalg.norm(r_lex    - r_regret)
     d_lex_hist    = np.linalg.norm(r_lex    - r_hist)
@@ -352,7 +352,7 @@ def compute_tau_intervention(
     ts_Phi: np.ndarray,
     ts_Delta: np.ndarray,
     nominal_total: float,
-    baseline_end: int = 20,
+    baseline_end: int = 25,
     k_phi: float = 2.0,
     k_delta: float = 2.0,
 ) -> dict:
@@ -507,7 +507,7 @@ def run_monitoring(
         r_regret_t = R_regret(Psi_t, nominal, V_A_total)
         r_hist_t   = R_hist(Psi_t, nominal, V_A_total, r_hist_anchor)
 
-        # Compute Delta(t) — formal Definition 3.26
+        # Compute Delta(t) — formal Definition 3.20
         # Maximum pairwise L2 distance between the three selection rule outputs
         Delta_t = compute_Delta(r_lex_t, r_regret_t, r_hist_t, V_A_total)
 

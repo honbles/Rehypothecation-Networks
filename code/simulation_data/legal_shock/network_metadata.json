@@ -1,0 +1,854 @@
+{
+  "n_claims": 30,
+  "n_institutions": 10,
+  "n_assets": 5,
+  "scenario": "legal_shock",
+  "rho_scalar": 0.15708812260536398,
+  "params": {
+    "N_INSTITUTIONS": 10,
+    "N_ASSETS": 5,
+    "N_CLAIMS_PER_ASSET": 6,
+    "ASSET_BASE_VALUE": 1000.0,
+    "OVERCLAIM_RATIO": 2.5,
+    "MAX_CHAIN_LENGTH": 2,
+    "REUSE_PROBABILITY": 0.25,
+    "N_JURISDICTIONS": 3,
+    "CROSS_JURISDICTION_ADMISSIBILITY": 0.7,
+    "T_STEPS": 100,
+    "RNG_SEED": 42,
+    "scenario_config": {
+      "T_steps": 100,
+      "mu_initial": 0.02,
+      "legal_shock_timestep": 50,
+      "legal_shock_magnitude": 0.8,
+      "economic_drift_rate": 0.0,
+      "delta_star": 0.15,
+      "beta_star": 2.0,
+      "description": "mu stable. Legal regime shock at t=50 removes 80% of cross-jurisdiction admissibility. Near-zero intervention window expected.",
+      "scenario": "legal_shock"
+    },
+    "overclaim_validation": {
+      "A_0": {
+        "V_A": 1285.37,
+        "sum_w_i": 3213.43,
+        "overclaim_ratio": 2.5,
+        "overclaim_satisfied": true
+      },
+      "A_1": {
+        "V_A": 1156.68,
+        "sum_w_i": 2891.7,
+        "overclaim_ratio": 2.5,
+        "overclaim_satisfied": true
+      },
+      "A_2": {
+        "V_A": 1171.64,
+        "sum_w_i": 2929.1,
+        "overclaim_ratio": 2.5,
+        "overclaim_satisfied": true
+      },
+      "A_3": {
+        "V_A": 776.87,
+        "sum_w_i": 1942.17,
+        "overclaim_ratio": 2.5,
+        "overclaim_satisfied": true
+      },
+      "A_4": {
+        "V_A": 970.23,
+        "sum_w_i": 2425.57,
+        "overclaim_ratio": 2.5,
+        "overclaim_satisfied": true
+      }
+    }
+  },
+  "institutions": [
+    {
+      "id": 0,
+      "name": "B_0",
+      "jurisdiction": 0,
+      "n_accounts": 3
+    },
+    {
+      "id": 1,
+      "name": "B_1",
+      "jurisdiction": 1,
+      "n_accounts": 6
+    },
+    {
+      "id": 2,
+      "name": "B_2",
+      "jurisdiction": 2,
+      "n_accounts": 6
+    },
+    {
+      "id": 3,
+      "name": "B_3",
+      "jurisdiction": 0,
+      "n_accounts": 5
+    },
+    {
+      "id": 4,
+      "name": "B_4",
+      "jurisdiction": 1,
+      "n_accounts": 5
+    },
+    {
+      "id": 5,
+      "name": "B_5",
+      "jurisdiction": 2,
+      "n_accounts": 7
+    },
+    {
+      "id": 6,
+      "name": "B_6",
+      "jurisdiction": 0,
+      "n_accounts": 3
+    },
+    {
+      "id": 7,
+      "name": "B_7",
+      "jurisdiction": 1,
+      "n_accounts": 6
+    },
+    {
+      "id": 8,
+      "name": "B_8",
+      "jurisdiction": 2,
+      "n_accounts": 4
+    },
+    {
+      "id": 9,
+      "name": "B_9",
+      "jurisdiction": 0,
+      "n_accounts": 3
+    }
+  ],
+  "assets": [
+    {
+      "id": 0,
+      "name": "A_0",
+      "recoverable_value": 1285.37
+    },
+    {
+      "id": 1,
+      "name": "A_1",
+      "recoverable_value": 1156.68
+    },
+    {
+      "id": 2,
+      "name": "A_2",
+      "recoverable_value": 1171.64
+    },
+    {
+      "id": 3,
+      "name": "A_3",
+      "recoverable_value": 776.87
+    },
+    {
+      "id": 4,
+      "name": "A_4",
+      "recoverable_value": 970.23
+    }
+  ],
+  "claims": [
+    {
+      "id": 0,
+      "asset_id": 0,
+      "holder_institution_id": 5,
+      "nominal_amount": 403.6276,
+      "provenance_path": [
+        2,
+        3
+      ],
+      "ancestry_set": [
+        2,
+        3
+      ],
+      "creation_timestep": 18,
+      "vector": {
+        "s": 1.0,
+        "p": 0.6797,
+        "e": 0.3516,
+        "j": 0.5544,
+        "l": 0.7745,
+        "tau": 0.8182
+      }
+    },
+    {
+      "id": 1,
+      "asset_id": 0,
+      "holder_institution_id": 3,
+      "nominal_amount": 1284.8503,
+      "provenance_path": [
+        4,
+        6
+      ],
+      "ancestry_set": [
+        4,
+        6
+      ],
+      "creation_timestep": 9,
+      "vector": {
+        "s": 0.82,
+        "p": 0.687,
+        "e": 0.3503,
+        "j": 0.8976,
+        "l": 0.7437,
+        "tau": 0.9091
+      }
+    },
+    {
+      "id": 2,
+      "asset_id": 0,
+      "holder_institution_id": 1,
+      "nominal_amount": 160.4238,
+      "provenance_path": [
+        1,
+        0
+      ],
+      "ancestry_set": [
+        0,
+        1
+      ],
+      "creation_timestep": 19,
+      "vector": {
+        "s": 0.64,
+        "p": 0.665,
+        "e": 0.362,
+        "j": 0.72,
+        "l": 0.7665,
+        "tau": 0.8081
+      }
+    },
+    {
+      "id": 3,
+      "asset_id": 0,
+      "holder_institution_id": 9,
+      "nominal_amount": 95.5379,
+      "provenance_path": [
+        4,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        4
+      ],
+      "creation_timestep": 17,
+      "vector": {
+        "s": 0.46,
+        "p": 0.7051,
+        "e": 0.3687,
+        "j": 0.8715,
+        "l": 0.7234,
+        "tau": 0.8283
+      }
+    },
+    {
+      "id": 4,
+      "asset_id": 0,
+      "holder_institution_id": 7,
+      "nominal_amount": 328.8103,
+      "provenance_path": [
+        4,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        4
+      ],
+      "creation_timestep": 16,
+      "vector": {
+        "s": 0.28,
+        "p": 0.7365,
+        "e": 0.3295,
+        "j": 0.709,
+        "l": 0.7161,
+        "tau": 0.8384
+      }
+    },
+    {
+      "id": 5,
+      "asset_id": 0,
+      "holder_institution_id": 6,
+      "nominal_amount": 940.1751,
+      "provenance_path": [
+        0,
+        9
+      ],
+      "ancestry_set": [
+        0,
+        9
+      ],
+      "creation_timestep": 15,
+      "vector": {
+        "s": 0.1,
+        "p": 0.7605,
+        "e": 0.3742,
+        "j": 0.8618,
+        "l": 0.77,
+        "tau": 0.8485
+      }
+    },
+    {
+      "id": 6,
+      "asset_id": 1,
+      "holder_institution_id": 4,
+      "nominal_amount": 449.229,
+      "provenance_path": [
+        7,
+        6
+      ],
+      "ancestry_set": [
+        6,
+        7
+      ],
+      "creation_timestep": 42,
+      "vector": {
+        "s": 1.0,
+        "p": 0.6684,
+        "e": 0.3327,
+        "j": 0.7416,
+        "l": 0.733,
+        "tau": 0.5758
+      }
+    },
+    {
+      "id": 7,
+      "asset_id": 1,
+      "holder_institution_id": 2,
+      "nominal_amount": 659.9101,
+      "provenance_path": [
+        6,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        6
+      ],
+      "creation_timestep": 29,
+      "vector": {
+        "s": 0.82,
+        "p": 0.7125,
+        "e": 0.3616,
+        "j": 0.6459,
+        "l": 0.7083,
+        "tau": 0.7071
+      }
+    },
+    {
+      "id": 8,
+      "asset_id": 1,
+      "holder_institution_id": 7,
+      "nominal_amount": 234.9679,
+      "provenance_path": [
+        2,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        2
+      ],
+      "creation_timestep": 16,
+      "vector": {
+        "s": 0.64,
+        "p": 0.7539,
+        "e": 0.2974,
+        "j": 0.7826,
+        "l": 0.7554,
+        "tau": 0.8384
+      }
+    },
+    {
+      "id": 9,
+      "asset_id": 1,
+      "holder_institution_id": 9,
+      "nominal_amount": 135.3712,
+      "provenance_path": [
+        3,
+        4
+      ],
+      "ancestry_set": [
+        3,
+        4
+      ],
+      "creation_timestep": 11,
+      "vector": {
+        "s": 0.46,
+        "p": 0.7014,
+        "e": 0.3663,
+        "j": 0.9055,
+        "l": 0.7808,
+        "tau": 0.8889
+      }
+    },
+    {
+      "id": 10,
+      "asset_id": 1,
+      "holder_institution_id": 2,
+      "nominal_amount": 1325.5173,
+      "provenance_path": [
+        0,
+        2
+      ],
+      "ancestry_set": [
+        0,
+        2
+      ],
+      "creation_timestep": 26,
+      "vector": {
+        "s": 0.28,
+        "p": 0.7635,
+        "e": 0.3725,
+        "j": 0.5935,
+        "l": 0.7749,
+        "tau": 0.7374
+      }
+    },
+    {
+      "id": 11,
+      "asset_id": 1,
+      "holder_institution_id": 7,
+      "nominal_amount": 86.7045,
+      "provenance_path": [
+        0,
+        5
+      ],
+      "ancestry_set": [
+        0,
+        5
+      ],
+      "creation_timestep": 36,
+      "vector": {
+        "s": 0.1,
+        "p": 0.758,
+        "e": 0.3074,
+        "j": 0.7262,
+        "l": 0.7123,
+        "tau": 0.6364
+      }
+    },
+    {
+      "id": 12,
+      "asset_id": 2,
+      "holder_institution_id": 7,
+      "nominal_amount": 115.8757,
+      "provenance_path": [
+        1,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        1
+      ],
+      "creation_timestep": 0,
+      "vector": {
+        "s": 1.0,
+        "p": 0.7149,
+        "e": 0.3528,
+        "j": 0.7122,
+        "l": 0.7581,
+        "tau": 1.0
+      }
+    },
+    {
+      "id": 13,
+      "asset_id": 2,
+      "holder_institution_id": 0,
+      "nominal_amount": 1470.8359,
+      "provenance_path": [
+        6,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        6
+      ],
+      "creation_timestep": 21,
+      "vector": {
+        "s": 0.82,
+        "p": 0.704,
+        "e": 0.3134,
+        "j": 0.9428,
+        "l": 0.7489,
+        "tau": 0.7879
+      }
+    },
+    {
+      "id": 14,
+      "asset_id": 2,
+      "holder_institution_id": 8,
+      "nominal_amount": 170.4928,
+      "provenance_path": [
+        1,
+        2
+      ],
+      "ancestry_set": [
+        1,
+        2
+      ],
+      "creation_timestep": 29,
+      "vector": {
+        "s": 0.64,
+        "p": 0.6749,
+        "e": 0.2974,
+        "j": 0.6134,
+        "l": 0.7419,
+        "tau": 0.7071
+      }
+    },
+    {
+      "id": 15,
+      "asset_id": 2,
+      "holder_institution_id": 8,
+      "nominal_amount": 109.2074,
+      "provenance_path": [
+        5,
+        4
+      ],
+      "ancestry_set": [
+        4,
+        5
+      ],
+      "creation_timestep": 39,
+      "vector": {
+        "s": 0.46,
+        "p": 0.7472,
+        "e": 0.363,
+        "j": 0.5609,
+        "l": 0.7233,
+        "tau": 0.6061
+      }
+    },
+    {
+      "id": 16,
+      "asset_id": 2,
+      "holder_institution_id": 1,
+      "nominal_amount": 187.917,
+      "provenance_path": [
+        3,
+        4
+      ],
+      "ancestry_set": [
+        3,
+        4
+      ],
+      "creation_timestep": 20,
+      "vector": {
+        "s": 0.28,
+        "p": 0.7389,
+        "e": 0.365,
+        "j": 0.7237,
+        "l": 0.7105,
+        "tau": 0.798
+      }
+    },
+    {
+      "id": 17,
+      "asset_id": 2,
+      "holder_institution_id": 7,
+      "nominal_amount": 874.7711,
+      "provenance_path": [
+        8,
+        5
+      ],
+      "ancestry_set": [
+        8,
+        5
+      ],
+      "creation_timestep": 7,
+      "vector": {
+        "s": 0.1,
+        "p": 0.6758,
+        "e": 0.2854,
+        "j": 0.7154,
+        "l": 0.7055,
+        "tau": 0.9293
+      }
+    },
+    {
+      "id": 18,
+      "asset_id": 3,
+      "holder_institution_id": 2,
+      "nominal_amount": 123.729,
+      "provenance_path": [
+        5,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        5
+      ],
+      "creation_timestep": 0,
+      "vector": {
+        "s": 1.0,
+        "p": 0.6745,
+        "e": 0.3667,
+        "j": 0.6024,
+        "l": 0.7052,
+        "tau": 1.0
+      }
+    },
+    {
+      "id": 19,
+      "asset_id": 3,
+      "holder_institution_id": 1,
+      "nominal_amount": 241.2317,
+      "provenance_path": [
+        3,
+        4
+      ],
+      "ancestry_set": [
+        3,
+        4
+      ],
+      "creation_timestep": 41,
+      "vector": {
+        "s": 0.82,
+        "p": 0.75,
+        "e": 0.3296,
+        "j": 0.7514,
+        "l": 0.7385,
+        "tau": 0.5859
+      }
+    },
+    {
+      "id": 20,
+      "asset_id": 3,
+      "holder_institution_id": 1,
+      "nominal_amount": 302.6387,
+      "provenance_path": [
+        5,
+        4
+      ],
+      "ancestry_set": [
+        4,
+        5
+      ],
+      "creation_timestep": 16,
+      "vector": {
+        "s": 0.64,
+        "p": 0.697,
+        "e": 0.3213,
+        "j": 0.7366,
+        "l": 0.7686,
+        "tau": 0.8384
+      }
+    },
+    {
+      "id": 21,
+      "asset_id": 3,
+      "holder_institution_id": 8,
+      "nominal_amount": 62.6257,
+      "provenance_path": [
+        3
+      ],
+      "ancestry_set": [
+        3
+      ],
+      "creation_timestep": 1,
+      "vector": {
+        "s": 0.46,
+        "p": 1.0,
+        "e": 0.0,
+        "j": 0.6195,
+        "l": 0.9114,
+        "tau": 0.9899
+      }
+    },
+    {
+      "id": 22,
+      "asset_id": 3,
+      "holder_institution_id": 0,
+      "nominal_amount": 1021.5633,
+      "provenance_path": [
+        2,
+        3
+      ],
+      "ancestry_set": [
+        2,
+        3
+      ],
+      "creation_timestep": 6,
+      "vector": {
+        "s": 0.28,
+        "p": 0.6814,
+        "e": 0.3398,
+        "j": 0.9116,
+        "l": 0.7572,
+        "tau": 0.9394
+      }
+    },
+    {
+      "id": 23,
+      "asset_id": 3,
+      "holder_institution_id": 4,
+      "nominal_amount": 190.3866,
+      "provenance_path": [
+        4,
+        3
+      ],
+      "ancestry_set": [
+        3,
+        4
+      ],
+      "creation_timestep": 29,
+      "vector": {
+        "s": 0.1,
+        "p": 0.6731,
+        "e": 0.3491,
+        "j": 0.7117,
+        "l": 0.7419,
+        "tau": 0.7071
+      }
+    },
+    {
+      "id": 24,
+      "asset_id": 4,
+      "holder_institution_id": 9,
+      "nominal_amount": 423.6142,
+      "provenance_path": [
+        9,
+        1
+      ],
+      "ancestry_set": [
+        9,
+        1
+      ],
+      "creation_timestep": 13,
+      "vector": {
+        "s": 1.0,
+        "p": 0.6765,
+        "e": 0.3422,
+        "j": 0.9137,
+        "l": 0.7686,
+        "tau": 0.8687
+      }
+    },
+    {
+      "id": 25,
+      "asset_id": 4,
+      "holder_institution_id": 7,
+      "nominal_amount": 1163.9124,
+      "provenance_path": [
+        8,
+        2
+      ],
+      "ancestry_set": [
+        8,
+        2
+      ],
+      "creation_timestep": 22,
+      "vector": {
+        "s": 0.82,
+        "p": 0.7522,
+        "e": 0.3117,
+        "j": 0.7997,
+        "l": 0.7837,
+        "tau": 0.7778
+      }
+    },
+    {
+      "id": 26,
+      "asset_id": 4,
+      "holder_institution_id": 2,
+      "nominal_amount": 230.2417,
+      "provenance_path": [
+        0,
+        8
+      ],
+      "ancestry_set": [
+        0,
+        8
+      ],
+      "creation_timestep": 12,
+      "vector": {
+        "s": 0.64,
+        "p": 0.742,
+        "e": 0.3032,
+        "j": 0.5643,
+        "l": 0.7911,
+        "tau": 0.8788
+      }
+    },
+    {
+      "id": 27,
+      "asset_id": 4,
+      "holder_institution_id": 6,
+      "nominal_amount": 219.6079,
+      "provenance_path": [
+        2,
+        8
+      ],
+      "ancestry_set": [
+        8,
+        2
+      ],
+      "creation_timestep": 14,
+      "vector": {
+        "s": 0.46,
+        "p": 0.7444,
+        "e": 0.3761,
+        "j": 0.8557,
+        "l": 0.7772,
+        "tau": 0.8586
+      }
+    },
+    {
+      "id": 28,
+      "asset_id": 4,
+      "holder_institution_id": 7,
+      "nominal_amount": 296.3037,
+      "provenance_path": [
+        8,
+        6
+      ],
+      "ancestry_set": [
+        8,
+        6
+      ],
+      "creation_timestep": 40,
+      "vector": {
+        "s": 0.28,
+        "p": 0.6914,
+        "e": 0.3543,
+        "j": 0.7193,
+        "l": 0.798,
+        "tau": 0.596
+      }
+    },
+    {
+      "id": 29,
+      "asset_id": 4,
+      "holder_institution_id": 3,
+      "nominal_amount": 91.8951,
+      "provenance_path": [
+        7,
+        1
+      ],
+      "ancestry_set": [
+        1,
+        7
+      ],
+      "creation_timestep": 18,
+      "vector": {
+        "s": 0.1,
+        "p": 0.7623,
+        "e": 0.3292,
+        "j": 0.8684,
+        "l": 0.7784,
+        "tau": 0.8182
+      }
+    }
+  ],
+  "jurisdiction_map": {
+    "0": 0,
+    "1": 1,
+    "2": 2,
+    "3": 0,
+    "4": 1,
+    "5": 2,
+    "6": 0,
+    "7": 1,
+    "8": 2,
+    "9": 0
+  }
+}

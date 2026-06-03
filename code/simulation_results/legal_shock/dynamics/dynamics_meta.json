@@ -1,0 +1,19 @@
+{
+  "scenario": "legal_shock",
+  "T": 100,
+  "n_claims": 30,
+  "shock_timestep": 35,
+  "shock_asset_id": 0,
+  "shock_magnitude": 0.25,
+  "cfg": {
+    "T_steps": 100,
+    "mu_initial": 0.02,
+    "legal_shock_timestep": 50,
+    "legal_shock_magnitude": 0.8,
+    "economic_drift_rate": 0.0,
+    "delta_star": 0.15,
+    "beta_star": 2.0,
+    "description": "mu stable. Legal regime shock at t=50 removes 80% of cross-jurisdiction admissibility. Near-zero intervention window expected.",
+    "scenario": "legal_shock"
+  }
+}

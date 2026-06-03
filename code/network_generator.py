@@ -24,15 +24,15 @@ Objects generated
 
 Paper references
 ----------------
-Definition 1.1  : Claim Vector
-Definition 1.2  : Legal Sub-vector
-Definition 1.3  : Economic Sub-vector
-Definition 1.5  : Asset Claim State
-Definition 1.6  : Decomposed Interaction Kernel
-Definition 2.1  : Collateral Provenance Path
-Definition 2.2  : Collateral Ancestry Set
-Definition 2.3  : Pairwise Chain Correlation
-Section 1.3     : Coordinate Interpretation
+Definition 3.1  : Claim Vector
+Definition 3.2  : Legal Sub-vector
+Definition 3.3  : Economic Sub-vector
+Definition 3.5  : Asset Claim State
+Definition 3.8  : Decomposed Interaction Kernel
+Definition 5.1  : Collateral Provenance Path
+Definition 5.2  : Collateral Ancestry Set
+Definition 5.2  : Pairwise Chain Correlation
+Section 3.2     : Coordinate Interpretation
 """
 
 import numpy as np
@@ -98,7 +98,7 @@ T_STEPS = 100
 class Institution:
     """
     Represents one institution B_k in B.
-    Paper: Section 3 Setup, Definition 1.6
+    Paper: Section 3 Setup, Definition 3.8
     """
     id: int                          # index k
     name: str                        # human-readable label
@@ -121,13 +121,13 @@ class Asset:
 class ClaimVector:
     """
     The full six-dimensional claim vector c_i.
-    Paper: Definition 1.1
+    Paper: Definition 3.1
 
-    Legal sub-vector  : (s_i, j_i, tau_i)  -- Definition 1.2
-    Economic sub-vector: (p_i, e_i, l_i)   -- Definition 1.3
+    Legal sub-vector  : (s_i, j_i, tau_i)  -- Definition 3.2
+    Economic sub-vector: (p_i, e_i, l_i)   -- Definition 3.3
 
     All dimensions in [0,1].
-    Classification is phenomenological not ontological (Section 1.3):
+    Classification is phenomenological not ontological (Section 3.2):
     dimensions classified by dominant dynamical behaviour.
 
     s_i   : legal seniority         -- 1=most senior, 0=equity
@@ -146,12 +146,12 @@ class ClaimVector:
 
     @property
     def legal(self) -> np.ndarray:
-        """Legal sub-vector (s, j, tau). Paper: Definition 1.2"""
+        """Legal sub-vector (s, j, tau). Paper: Definition 3.2"""
         return np.array([self.s, self.j, self.tau])
 
     @property
     def economic(self) -> np.ndarray:
-        """Economic sub-vector (p, e, l). Paper: Definition 1.3"""
+        """Economic sub-vector (p, e, l). Paper: Definition 3.3"""
         return np.array([self.p, self.e, self.l])
 
     @property
@@ -164,7 +164,7 @@ class ClaimVector:
 class Claim:
     """
     Represents one claim C_i on asset A.
-    Paper: Definition 1.5, Definition 2.1
+    Paper: Definition 3.5, Definition 5.1
 
     A claim is held by one institution (the current holder).
     Its provenance path records every institution through which
@@ -185,7 +185,7 @@ class Claim:
     def ancestry_set(self) -> set:
         """
         pi(C_i): set of all institutions in provenance path.
-        Paper: Definition 2.2
+        Paper: Definition 5.2
         Note: typed space V = B sqcup A; here we store institution ids only.
         Asset ancestry is handled separately in rho_iA computation.
         """
@@ -265,7 +265,7 @@ def generate_provenance_path(
     The path is a directed sequence of institution ids representing
     the chain of custody before the current holder received the claim.
 
-    Paper: Definition 2.1
+    Paper: Definition 5.1
     This is causal dependency, not legal title. The path records
     which institutions the collateral passed through.
 
@@ -313,7 +313,7 @@ def generate_claim_vector(
          (longer path = more encumbered)
     - l: liquidity degrades with cross-jurisdiction hops in path
 
-    All values in [0,1]. Classification is phenomenological (Section 1.3).
+    All values in [0,1]. Classification is phenomenological (Section 3.2).
     """
 
     # --- Legal dimensions ---
@@ -378,7 +378,7 @@ def generate_claims(
     Nominal amounts are set so sum(w_i) = OVERCLAIM_RATIO * V_A
     ensuring the structural overclaim condition.
 
-    Paper: Definition 1.5, conservation constraint
+    Paper: Definition 3.5, conservation constraint
     """
     claims = []
     claim_id = 0
@@ -444,7 +444,7 @@ def compute_rho_matrix(claims: List[Claim]) -> np.ndarray:
     rho_ij = |pi(C_i) intersect pi(C_j)| / |pi(C_i) union pi(C_j)|
 
     This is the Jaccard similarity of ancestry sets.
-    Paper: Definition 2.3
+    Paper: Definition 5.2
 
     rho_ij = 0 when claims share no ancestry (fully independent)
     rho_ij = 1 when claims have identical provenance paths
@@ -497,7 +497,7 @@ def build_G_legal(
     Entry (i,j) = True if the interaction between C_i and C_j
     is admissible under the governing legal regime.
 
-    Admissibility rules (paper: Definition 1.6):
+    Admissibility rules (paper: Definition 3.8):
     - Same jurisdiction institutions: always admissible
     - Cross-jurisdiction institutions: admissible with probability
       CROSS_JURISDICTION_ADMISSIBILITY
@@ -540,7 +540,7 @@ def build_G_econ(
     """
     Build the initial economic interaction kernel G_econ_t.
 
-    Paper: Definition 1.6
+    Paper: Definition 3.8
     G_econ_t in R^{3n x 3n} where n = number of claims.
     Acts on the stacked economic state vector C_econ_t in R^{3n}.
 
@@ -571,7 +571,8 @@ def build_G_econ(
             # in monitoring.py, not economic coupling existence.
             # Claims can be economically coupled through shared ancestry
             # even when legally inadmissible for direct priority comparison.
-            coupling = rho_matrix[i, j] * mu
+            coupling = rho_matrix[i, j] * np.log1p(mu) / np.log1p(1.0)
+            coupling = np.clip(coupling, 0, 0.3)
 
             if coupling < 1e-10:
                 continue
@@ -710,7 +711,7 @@ def generate_network(scenario: str) -> Network:
     rho_matrix  = compute_rho_matrix(claims)
     rho_scalar  = compute_rho_scalar(rho_matrix)
     G_legal     = build_G_legal(institutions, claims)
-    G_econ      = build_G_econ(claims, rho_matrix, G_legal, mu=0.1)
+    G_econ      = build_G_econ(claims, rho_matrix, G_legal, mu=0.02)
 
     print(f"  rho(0)       : {rho_scalar:.4f}")
     print(f"  G_econ shape : {G_econ.shape}")

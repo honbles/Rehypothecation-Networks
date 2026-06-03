@@ -1,0 +1,19 @@
+{
+  "scenario": "economic_drift",
+  "T": 100,
+  "n_claims": 30,
+  "shock_timestep": 35,
+  "shock_asset_id": 0,
+  "shock_magnitude": 0.25,
+  "cfg": {
+    "T_steps": 100,
+    "mu_initial": 0.02,
+    "legal_shock_timestep": null,
+    "legal_shock_magnitude": 0.0,
+    "economic_drift_rate": 0.012,
+    "delta_star": 0.15,
+    "beta_star": 2.0,
+    "description": "G_legal stable. mu drifts upward at 0.012/step. Wide intervention window expected.",
+    "scenario": "economic_drift"
+  }
+}

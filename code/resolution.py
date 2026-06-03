@@ -24,12 +24,12 @@ What this script does
 
 Paper references
 ----------------
-Resolution Mode          : Section 1.8.1 (subsubsection)
+Resolution Mode          : Section 3.9.1 (subsubsection)
 Set-Valued Clearing Op   : Definition -- Set-Valued Clearing Operator
 Three Selection Rules    : Definitions R_lex, R_regret, R_hist
 Classical Netting Thm    : Theorem -- Classical Netting Underestimation
 Conservation Constraint  : sum(w_i) > V_A
-Crisis Fixed Point       : Section 1.5
+Crisis Fixed Point       : Section 3.5
 """
 
 import numpy as np
@@ -256,8 +256,12 @@ def run_resolution(
     # --- Build Psi at crisis fixed point ---
     Psi_crisis = build_Psi(nominal, C_econ_crisis)
 
-    # --- Get historical precedent (last monitoring allocation) ---
-    r_hist_prev = d["ts_r_lex"][-1]
+    # --- Get historical precedent anchor ---
+    # Paper Definition 3.19: absent a prior resolution event, anchored at
+    # proportional allocation r_hist_i = w_i * V_A / sum_j(w_j).
+    # This is consistent with the monitoring.py anchor (r_hist_anchor)
+    # used throughout the 100-step monitoring run.
+    r_hist_prev = nominal * (V_A_total / nominal.sum())
 
     # --- Execute all three selection rules ---
     print("\n  Executing selection rules at crisis fixed point...")
@@ -550,7 +554,7 @@ def plot_resolution(results: dict, output_dir: str) -> None:
     ax.text(0.02, 0.97,
             f"Correlated pairs: {results['gap_lex']['n_correlated_pairs']}\n"
             f"Mean $\\rho_{{ij}}$: {results['gap_lex']['mean_rho']:.3f}\n"
-            f"Theorem 2.1 confirmed: "
+            f"Theorem 5.5 confirmed: "
             f"{'Yes' if results['gap_lex']['underestimation_confirmed'] else 'No'}",
             transform=ax.transAxes, fontsize=9,
             va='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))

@@ -1,0 +1,64 @@
+{
+  "scenario": "compound",
+  "n": 30,
+  "V_A_total": 5360.790000000001,
+  "metrics": {
+    "R_lex": {
+      "label": "R_lex",
+      "recovery_rate": 1.0,
+      "shortfall": 0.6,
+      "max_regret": 1325.52,
+      "budget_used": 5360.79,
+      "V_A_total": 5360.79,
+      "conservation": true
+    },
+    "R_regret": {
+      "label": "R_regret",
+      "recovery_rate": 1.0,
+      "shortfall": 0.6,
+      "max_regret": 425.55,
+      "budget_used": 5360.79,
+      "V_A_total": 5360.79,
+      "conservation": true
+    },
+    "R_hist": {
+      "label": "R_hist",
+      "recovery_rate": 1.0,
+      "shortfall": 0.6,
+      "max_regret": 882.5,
+      "budget_used": 5360.79,
+      "V_A_total": 5360.79,
+      "conservation": true
+    },
+    "R_netting": {
+      "label": "Classical Netting",
+      "recovery_rate": 1.0,
+      "shortfall": 0.6,
+      "max_regret": 882.5,
+      "budget_used": 5360.79,
+      "V_A_total": 5360.79,
+      "conservation": true
+    }
+  },
+  "gap_lex": {
+    "total_gap_pct": 46.99,
+    "corr_gap_abs": 430.35,
+    "n_correlated_pairs": 170,
+    "mean_rho": 0.402,
+    "underestimation_confirmed": true
+  },
+  "gap_regret": {
+    "total_gap_pct": 27.91,
+    "corr_gap_abs": 252.0,
+    "n_correlated_pairs": 170,
+    "mean_rho": 0.402,
+    "underestimation_confirmed": true
+  },
+  "gap_hist": {
+    "total_gap_pct": 46.99,
+    "corr_gap_abs": 430.35,
+    "n_correlated_pairs": 170,
+    "mean_rho": 0.402,
+    "underestimation_confirmed": true
+  }
+}

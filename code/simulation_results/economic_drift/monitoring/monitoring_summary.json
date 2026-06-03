@@ -1,0 +1,34 @@
+{
+  "scenario": "economic_drift",
+  "tau_info": {
+    "t_phi_star": 31,
+    "t_delta_star": 99,
+    "tau_intervention": 68,
+    "phi_threshold": 23.429385541758812,
+    "delta_threshold": 0.3629251912772586,
+    "phi_at_t_phi": 23.80192457808839,
+    "delta_at_t_delta": 0.30131177839450307,
+    "transition_detected": true
+  },
+  "transition": {
+    "detected": false,
+    "t_transition": 99,
+    "Delta_at_transition": 0.30131177839450307,
+    "beta_at_transition": 3.6027823396706453
+  },
+  "Delta_star_pct": 0.1,
+  "beta_star": 0.5,
+  "phi_star_pct": 0.15,
+  "V_A_total": 5360.790000000001,
+  "cfg": {
+    "T_steps": 100,
+    "mu_initial": 0.02,
+    "legal_shock_timestep": null,
+    "legal_shock_magnitude": 0.0,
+    "economic_drift_rate": 0.012,
+    "delta_star": 0.15,
+    "beta_star": 2.0,
+    "description": "G_legal stable. mu drifts upward at 0.012/step. Wide intervention window expected.",
+    "scenario": "economic_drift"
+  }
+}
