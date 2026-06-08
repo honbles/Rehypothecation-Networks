@@ -886,7 +886,8 @@ def save_network(network: Network, output_dir: str) -> None:
 
 if __name__ == "__main__":
 
-    output_base = "simulation_data"
+    _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    output_base = os.path.join(_SCRIPT_DIR, "simulation_data")
 
     # Reset rng to same seed before each scenario so all three share
     # an identical base network topology. Only scenario-specific

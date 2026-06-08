@@ -842,8 +842,9 @@ def plot_resolution(results: dict, output_dir: str) -> None:
 
 if __name__ == "__main__":
 
-    data_base      = "simulation_data"
-    results_base   = "simulation_results"
+    _SCRIPT_DIR    = os.path.dirname(os.path.abspath(__file__))
+    data_base      = os.path.join(_SCRIPT_DIR, "simulation_data")
+    results_base   = os.path.join(_SCRIPT_DIR, "simulation_results")
 
     all_results = {}
 

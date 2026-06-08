@@ -1071,9 +1071,13 @@ if __name__ == "__main__":
 
     from scipy.optimize import linprog   # verify scipy available
 
-    data_base     = "simulation_data"
-    dynamics_base = "simulation_results"
-    output_base   = "simulation_results"
+    # Anchor all paths to the directory containing this script so the script
+    # works regardless of the working directory (e.g. when run from a Jupyter
+    # notebook whose kernel CWD differs from the repo root).
+    _SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
+    data_base     = os.path.join(_SCRIPT_DIR, "simulation_data")
+    dynamics_base = os.path.join(_SCRIPT_DIR, "simulation_results")
+    output_base   = os.path.join(_SCRIPT_DIR, "simulation_results")
 
     tau_summary = {}
 

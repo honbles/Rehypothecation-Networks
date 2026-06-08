@@ -45,17 +45,18 @@ COLORS = {
     "legal_shock":    "#d62728",
     "compound":       "#2ca02c",
 }
-FIGURE_DIR = "simulation_results/paper_figures"
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+FIGURE_DIR  = os.path.join(_SCRIPT_DIR, "simulation_results", "paper_figures")
 
 os.makedirs(FIGURE_DIR, exist_ok=True)
 
 
 def load_all(scenario: str) -> dict:
     d = {}
-    base_dyn = f"simulation_results/{scenario}/dynamics"
-    base_mon = f"simulation_results/{scenario}/monitoring"
-    base_res = f"simulation_results/{scenario}/resolution"
-    base_dat = f"simulation_data/{scenario}"
+    base_dyn = os.path.join(_SCRIPT_DIR, f"simulation_results/{scenario}/dynamics")
+    base_mon = os.path.join(_SCRIPT_DIR, f"simulation_results/{scenario}/monitoring")
+    base_res = os.path.join(_SCRIPT_DIR, f"simulation_results/{scenario}/resolution")
+    base_dat = os.path.join(_SCRIPT_DIR, f"simulation_data/{scenario}")
 
     d["kappa"]     = np.load(f"{base_dyn}/ts_kappa.npy")
     d["L"]         = np.load(f"{base_dyn}/ts_L.npy")
