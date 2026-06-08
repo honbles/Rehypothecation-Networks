@@ -886,7 +886,7 @@ def save_network(network: Network, output_dir: str) -> None:
 
 if __name__ == "__main__":
 
-    _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else os.getcwd()
     output_base = os.path.join(_SCRIPT_DIR, "simulation_data")
 
     # Reset rng to same seed before each scenario so all three share

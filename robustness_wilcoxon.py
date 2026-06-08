@@ -48,7 +48,7 @@ import matplotlib.pyplot as plt
 # Output directory — anchored to the script's own directory so it works
 # regardless of the notebook/shell working directory.
 # ---------------------------------------------------------------------------
-_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else os.getcwd()
 OUTPUT_DIR  = os.path.join(_SCRIPT_DIR, "robustness_results")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

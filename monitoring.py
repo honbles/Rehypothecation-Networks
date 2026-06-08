@@ -1074,7 +1074,7 @@ if __name__ == "__main__":
     # Anchor all paths to the directory containing this script so the script
     # works regardless of the working directory (e.g. when run from a Jupyter
     # notebook whose kernel CWD differs from the repo root).
-    _SCRIPT_DIR   = os.path.dirname(os.path.abspath(__file__))
+    _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else os.getcwd()
     data_base     = os.path.join(_SCRIPT_DIR, "simulation_data")
     dynamics_base = os.path.join(_SCRIPT_DIR, "simulation_results")
     output_base   = os.path.join(_SCRIPT_DIR, "simulation_results")

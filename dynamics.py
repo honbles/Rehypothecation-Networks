@@ -529,7 +529,7 @@ def plot_dynamics(results: dict, output_dir: str) -> None:
 # -----------------------------------------------------------------------
 
 if __name__ == "__main__":
-    _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else os.getcwd()
     data_base   = os.path.join(_SCRIPT_DIR, "simulation_data")
     output_base = os.path.join(_SCRIPT_DIR, "simulation_results")
     for scenario in ["economic_drift", "legal_shock", "compound"]:

@@ -45,7 +45,7 @@ COLORS = {
     "legal_shock":    "#d62728",
     "compound":       "#2ca02c",
 }
-_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__)) if "__file__" in dir() else os.getcwd()
 FIGURE_DIR  = os.path.join(_SCRIPT_DIR, "simulation_results", "paper_figures")
 
 os.makedirs(FIGURE_DIR, exist_ok=True)
